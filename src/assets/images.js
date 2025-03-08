@@ -1,6 +1,7 @@
 const IMAGES = {
     // Home page
-    // logo: new URL("./Img/logo.png", import.meta.url).href,
+    logo: new URL("./Img/logo.png", import.meta.url).href,
+    logo_black: new URL("./Img/logo_black.png", import.meta.url).href,
     hero_image_1: new URL("./Img/hero_1.jpg", import.meta.url).href,
     image_1: new URL("./Img/hero_2.jpg", import.meta.url).href,
     image_2: new URL("./Img/hero_3.jpg", import.meta.url).href,
@@ -26,6 +27,12 @@ const IMAGES = {
     liz_one: new URL("./Img/LizOne.jpg", import.meta.url).href,
     donald: new URL("./Img/Donald.jpg", import.meta.url).href,
     flyer: new URL("./Img/KIDDIES & ME FLYER 1.png", import.meta.url).href,
+
+    //  SVG
+    authentication: new URL("./svg/authentication.svg", import.meta.url).href,
+    dash_one: new URL("./svg/dash1.svg", import.meta.url).href,
+    dash_two: new URL("./svg/dash2.svg", import.meta.url).href,
+    dash_three: new URL("./svg/dash3.svg", import.meta.url).href,
 };
 
 export default IMAGES;

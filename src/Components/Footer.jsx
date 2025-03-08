@@ -3,8 +3,13 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { BiPhone } from "react-icons/bi";
 import { HiLocationMarker } from "react-icons/hi";
 import { MdEmail } from "react-icons/md";
+import IMAGES from "../assets/images";
+import { useAuth } from "../app-context/auth-user-context";
 
 const Footer = () => {
+
+    const { getCurrentYear } = useAuth();
+
     return (
         <footer
             className="py-5"
@@ -17,6 +22,7 @@ const Footer = () => {
                 <Row className="text-center text-md-left">
                     <Col md={4}>
                         <h3 className="">Kiddies & Me Careroot CIC</h3>
+                        <img className="mb-4" src={IMAGES.logo} alt="" height="100" width={'50%'} />
                     </Col>
 
                     {/* About Us Column */}
@@ -52,7 +58,7 @@ const Footer = () => {
 
                 {/* Footer Bottom */}
                 <div className="text-center mt-4" style={{ color: "#888" }}>
-                    <p>Copyright ©2025 All rights reserved | Foundation Inc.</p>
+                    <p className="mb-3">&copy;{getCurrentYear()} All rights reserved | Kiddies&Me CareRoot CIC</p>
                 </div>
             </div>
         </footer>

@@ -2,14 +2,25 @@ import React, { useState } from 'react'
 import { Button, Form } from 'react-bootstrap';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import ErrorMessage from '../Components/ErrorMessage';
 import { schema } from '../yup-schemas/registration-schema';
 import { ThreeDotLoading } from '../Components/Indicators';
 import IMAGES from "../assets/images";
+import ConfirmDialog from '../Components/DialogBoxes/ConfirmDialog';
+import handleErrMsg from '../Utils/error-handler';
+import registrantController from '../controllers/registrant-controller';
 
 const Registration = () => {
+    const navigate = useNavigate();
+
     const [networkRequest, setNetworkRequest] = useState(false);
+
+    const [showModal, setShowModal] = useState(false);
+    const [displayMsg, setDisplayMsg] = useState("");
+    const [formData, setFormData] = useState({});
             
     const {
         register,
@@ -20,7 +31,32 @@ const Registration = () => {
         resolver: yupResolver(schema),
     });
 
-	const onSubmit = async (formData) => {
+    const handleOpenModal = () => {
+        setDisplayMsg('Submit Registration form?');
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => setShowModal(false);
+
+	const handleConfirmOK = async () => {
+        setShowModal(false);
+		try {
+			setNetworkRequest(true);
+			await registrantController.onboarding(formData);
+			
+			toast.info('Form submission successful');
+			setNetworkRequest(false);
+			navigate("/");
+		} catch (error) {
+			// display error message
+			setNetworkRequest(false);
+			toast.error(handleErrMsg(error).msg);
+		}
+	}
+
+	const onSubmit = async (data) => {
+		setFormData(data);
+		handleOpenModal();
 	};
 
     return (
@@ -62,6 +98,18 @@ const Registration = () => {
                                 {...register("phone_no")}
                             />
                             <ErrorMessage source={errors.phone_no} />
+                        </div>
+            
+                        {/* Number of people attending */}
+                        <div>
+                            <label className="fw-bold">Number of people attending:</label>
+                            <input
+                                type="number"
+                                className="form-control shadow-sm"
+                                placeholder="Phone Number"
+                                {...register("no_attending")}
+                            />
+                            <ErrorMessage source={errors.no_attending} />
                         </div>
 
                         <div>
@@ -115,16 +163,78 @@ const Registration = () => {
                         <div>
                             <label className="fw-bold">Postal / Zip Code:</label>
                             <input
-                                type="text"
+                                type="number"
                                 className="form-control shadow-sm"
                                 placeholder="Postal / Zip Code"
                                 {...register("zip")}
                             />
                             <ErrorMessage source={errors.zip} />
                         </div>
+            
+                        <div>
+                            <p>
+                                We will be holding our events at different locations around Medway. Please click one you will be attending. Data and location will be
+                                confirmed on all our social media networks. Facebook and Instagram 
+                            </p>
+                        </div>
+            
+                        {/* Locations */}
+                        <div className='d-flex flex-wrap gap-4'>
+                            <div className='d-flex gap-1'>
+                                <input
+                                    type="checkbox"
+                                    className="shadow-sm"
+                                    name='Walderslade'
+                                    value='Walderslade'
+                                    {...register("locations")}
+                                />
+                                <label className="fw-bold">Walderslade</label>
+                            </div>
+                            <div className='d-flex gap-2'>
+                                <input
+                                    type="checkbox"
+                                    className="shadow-sm"
+                                    name='Lordswood'
+                                    value='Lordswood'
+                                    {...register("locations")}
+                                />
+                                <label className="fw-bold">Lordswood</label>
+                            </div>
+                            <div className='d-flex gap-2'>
+                                <input
+                                    type="checkbox"
+                                    className="shadow-sm"
+                                    name='Wayfield'
+                                    value='Wayfield'
+                                    {...register("locations")}
+                                />
+                                <label className="fw-bold">Wayfield</label>
+                            </div>
+                            <div className='d-flex gap-2'>
+                                <input
+                                    type="checkbox"
+                                    className="shadow-sm"
+                                    name='Rochester'
+                                    value='Rochester'
+                                    {...register("locations")}
+                                />
+                                <label className="fw-bold">Rochester</label>
+                            </div>
+                            <div className='d-flex gap-2'>
+                                <input
+                                    type="checkbox"
+                                    className="shadow-sm"
+                                    name='Maidstone'
+                                    value='Maidstone'
+                                    {...register("locations")}
+                                />
+                                <label className="fw-bold">Maidstone</label>
+                            </div>
+                        </div>
+                        <ErrorMessage source={errors.locations} />
 
                         <Button
-                            className="mx-auto w-50 donate-btn btn-lg"
+                            className="mx-auto w-50 orange-btn btn-lg"
                             // variant="primary"
                             disabled={networkRequest}
                             onClick={handleSubmit(onSubmit)}
@@ -135,9 +245,15 @@ const Registration = () => {
                     </Form>
                 </div>
                 <div className="col-sm-12 col-md-8 my-3">
-                    <img src={IMAGES.flyer} className="volunteer-img w-100" style={{height: '75vh'}} />
+                    <img src={IMAGES.flyer} className="volunteer-img w-100" style={{height: '80vh'}} />
                 </div>
             </div>
+            <ConfirmDialog
+                show={showModal}
+                handleClose={handleCloseModal}
+                handleConfirm={handleConfirmOK}
+                message={displayMsg}
+            />
         </div>
     )
 }
