@@ -111,7 +111,7 @@ const About = () => {
                             <div className="volunteer-img-container">
                                 <img src={IMAGES.liz_one} className="volunteer-img" />
                             </div>
-                            <div className="d-flex flex-column">
+                            <div className="d-flex flex-column" style={{minHeight: '185px'}}>
                                 <h4>Olajumoke Elizabeth Falanwo</h4>
                                 <p>Founder</p>
                                 <p>
@@ -125,14 +125,13 @@ const About = () => {
                     <Col xs={12} sm={6} md={4} lg={6} className="mb-4">
                         <AnimatedCard>
                             <div className="volunteer-img-container">
-                                <img src={IMAGES.kay} className="volunteer-img" />
+                                <img src={IMAGES.donald} className="volunteer-img" />
                             </div>
-                            <div className="d-flex flex-column">
-                                <h4>Olukayode Tayo Olaniyan</h4>
+                            <div className="d-flex flex-column" style={{minHeight: '185px'}}>
+                                <h4>Donald Wigwe</h4>
                                 <p>Co-Founder</p>
                                 <p>
-                                    Kay as he likes to be called owns a partner charity organisation that supports widows and women and children in needs.
-                                    He has happily partners with our newly founded organisation to reach as many families as possible
+                                    Donald is fascinated in helping others. for his love for helping people, he named his daughter CHARITY.
                                 </p>
                             </div>
                         </AnimatedCard>
@@ -140,14 +139,14 @@ const About = () => {
                     <Col xs={12} sm={6} md={4} lg={6} className="mb-4">
                         <AnimatedCard>
                             <div className="volunteer-img-container">
-                                <img src={IMAGES.donald} className="volunteer-img" />
+                                <img src={IMAGES.kay} className="volunteer-img" />
                             </div>
-                            <div className="d-flex flex-column">
-                                <h4>Donald Wigwe</h4>
-                                <p>Friend and Co-Founder</p>
+                            <div className="d-flex flex-column" style={{minHeight: '185px'}}>
+                                <h4>Olukayode Tayo Olaniyan</h4>
+                                <p>Co-Founder</p>
                                 <p>
-                                    Donald is a friend of the charity organisation that loves to help others, for his love for charity, he named his daughter
-                                    CHARITY.
+                                    Kay as he likes to be called owns a partner charity organisation that supports widows and women and children in needs.
+                                    He has happily partners with our newly founded organisation to reach as many families as possible
                                 </p>
                             </div>
                         </AnimatedCard>

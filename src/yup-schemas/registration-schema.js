@@ -5,8 +5,8 @@ const schema = yup.object().shape({
     l_name: yup.string().required("Last Name is required"),
     no_attending: yup.number().typeError('Must be a number').positive("Must be greater than 0").required("required"),
     city: yup.string().required("City is required"),
-    province: yup.string().required("State/Province is required"),
-    zip: yup.number().typeError('Zip must be a number').positive("Must be greater than 0").required("required"),
+    province: yup.string().required("Location is required"),
+    zip: yup.string().required("Postal code is required"),
     phone_no: yup.string()
         .matches(/^\d{10,11}$/, "Invalid phone number")
         .required("Phone number is required"),

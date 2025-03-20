@@ -46,7 +46,7 @@ const Footer = () => {
                             </p>
                             <p className="d-flex gap-2">
                                 <BiPhone size={20} />
-                                <span className="fw-bold">Phone:</span>07460716648
+                                <span className="fw-bold">Phone:</span>07309400863
                             </p>
                             <p className="d-flex gap-2">
                                 <MdEmail size={20} />

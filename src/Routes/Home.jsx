@@ -19,7 +19,7 @@ const Home = () => {
                     Let's Build a Brighter Future Together. <br />
                 </p>
                 <div className="btn-div d-inline-block">
-                    <Button className="donate-btn btn-lg px-5 py-3 rounded-1" onClick={() => window.open(`https://wa.me/+447460716648`, '_blank')?.focus()}>
+                    <Button className="donate-btn btn-lg px-5 py-3 rounded-1" onClick={() => window.open(`https://wa.me/+447309400863`, '_blank')?.focus()}>
                         Chat With Us
                     </Button>
                 </div>
@@ -77,7 +77,7 @@ const Home = () => {
                             </div>
                             <h4>Babies</h4>
                             <p>
-                                Having a baby is an exciting and wonderful event. It is also stressful for mothers.
+                                Having a baby is an exciting and wonderful experience. It is also stressful for mothers.
                             </p>
                         </div>
                     </div>
@@ -133,7 +133,7 @@ const Home = () => {
                                 <h4 className="btn-outline px-5 py-3 rounded-1 link-success">Health</h4>
                                 <ul className="text-start w-75">
                                     <li>Access to affordable prenantal and pediatric care</li>
-                                    <li>Free health check-ups and vaccinations</li>
+                                    <li>Free health check-ups</li>
                                 </ul>
                             </div>
                         </AnimatedCard>
@@ -172,7 +172,10 @@ const Home = () => {
                             </div>
                             <div className="d-flex flex-column align-items-center">
                                 <h4 className="btn-outline px-5 py-3 rounded-1 link-success">Group Support</h4>
-                                <p>Parenting support groups</p>
+                                <ul className="text-start w-75">
+                                    <li>Parenting support groups</li>
+                                    <li>Connecting with other parents</li>
+                                </ul>
                             </div>
                         </AnimatedCard>
                     </Col>

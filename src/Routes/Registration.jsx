@@ -147,13 +147,13 @@ const Registration = () => {
                             <ErrorMessage source={errors.city} />
                         </div>
             
-                        {/* State / Province */}
+                        {/* Location */}
                         <div>
-                            <label className="fw-bold">State / Province:</label>
+                            <label className="fw-bold">Location:</label>
                             <input
                                 type="text"
                                 className="form-control shadow-sm"
-                                placeholder="State / Province"
+                                placeholder="Location"
                                 {...register("province")}
                             />
                             <ErrorMessage source={errors.province} />
@@ -190,7 +190,7 @@ const Registration = () => {
                                 />
                                 <label className="fw-bold">Walderslade</label>
                             </div>
-                            <div className='d-flex gap-2'>
+                            {/* <div className='d-flex gap-2'>
                                 <input
                                     type="checkbox"
                                     className="shadow-sm"
@@ -199,8 +199,8 @@ const Registration = () => {
                                     {...register("locations")}
                                 />
                                 <label className="fw-bold">Lordswood</label>
-                            </div>
-                            <div className='d-flex gap-2'>
+                            </div> */}
+                            {/* <div className='d-flex gap-2'>
                                 <input
                                     type="checkbox"
                                     className="shadow-sm"
@@ -209,8 +209,8 @@ const Registration = () => {
                                     {...register("locations")}
                                 />
                                 <label className="fw-bold">Wayfield</label>
-                            </div>
-                            <div className='d-flex gap-2'>
+                            </div> */}
+                            {/* <div className='d-flex gap-2'>
                                 <input
                                     type="checkbox"
                                     className="shadow-sm"
@@ -219,7 +219,7 @@ const Registration = () => {
                                     {...register("locations")}
                                 />
                                 <label className="fw-bold">Rochester</label>
-                            </div>
+                            </div> */}
                             <div className='d-flex gap-2'>
                                 <input
                                     type="checkbox"
