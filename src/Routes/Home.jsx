@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { CiSettings } from "react-icons/ci";
@@ -7,9 +7,28 @@ import HeroComp from "../Components/HeroComp";
 import AnimatedCard from "../Components/AnimatedCard";
 import { Wrapper } from "../Styles/Home";
 import IMAGES from "../assets/images";
+import EventPopup from "./EventPopupPage";
 
 const Home = () => {
     const navigate = useNavigate();
+
+    const [show, setShow] = useState(false);
+    const [events, setEvents] = useState([]);
+    
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 300 && events.length > 0) {
+                setShow(true);
+                document.removeEventListener("scroll", handleScroll);
+            }
+        };
+
+        document.addEventListener("scroll", handleScroll);
+
+        return () => {
+            document.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
 
     return (
         <Wrapper>
@@ -19,7 +38,7 @@ const Home = () => {
                     Let's Build a Brighter Future Together. <br />
                 </p>
                 <div className="btn-div d-inline-block">
-                    <Button className="donate-btn btn-lg px-5 py-3 rounded-1" onClick={() => window.open(`https://wa.me/+447309400863`, '_blank')?.focus()}>
+                    <Button className="donate-btn btn-lg px-5 py-3 rounded-1" onClick={() => document.open(`https://wa.me/+447309400863`, '_blank')?.focus()}>
                         Chat With Us
                     </Button>
                 </div>
@@ -180,6 +199,7 @@ const Home = () => {
                         </AnimatedCard>
                     </Col>
                 </Row>
+                <EventPopup show={show} setShow={setShow} />
             </div>
         </Wrapper>
     );

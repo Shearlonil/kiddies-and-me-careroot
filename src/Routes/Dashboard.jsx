@@ -18,22 +18,22 @@ const Dashboard = () => {
 			<hr className="my-4" />
 			<div className="d-flex flex-column gap-4">
 				<Card className="py-3 px-2 gap-3 shadow-sm bg-light d-flex flex-column flex-md-row justify-content-around align-items-md-center">
-					<div className="px-3 gap-3 d-flex flex-column order-1 order-md-0">
-						<h2 className="display-6 paytone-one">Registrants</h2>
-						<Link className="btn btn-secondary fs-5" to={"registrants"}>
-							View
-						</Link>
-					</div>
-					<div className="order-0 order-md-1">
+					<div className="text-center">
 						<img
 							style={{ maxWidth: "300px", width: "100%" }}
 							src={IMAGES.dash_one}
 							alt=""
 						/>
 					</div>
+					<div className="px-3 gap-3 d-flex flex-column ">
+						<h2 className="display-6 paytone-one">Registrants</h2>
+						<Link className="btn btn-secondary fs-5" to={"registrants"}>
+							View
+						</Link>
+					</div>
 				</Card>
-				{/* <Card className="py-3 px-2 gap-3 shadow-sm bg-warning-subtle d-flex flex-column flex-md-row justify-content-around align-items-md-center">
-					<div>
+				<Card className="py-3 px-2 gap-3 shadow-sm bg-warning-subtle d-flex flex-column flex-md-row justify-content-around align-items-md-center">
+					<div className="text-center">
 						<img
 							style={{ maxWidth: "300px", width: "100%" }}
 							src={IMAGES.dash_two}
@@ -41,12 +41,15 @@ const Dashboard = () => {
 						/>
 					</div>
 					<div className="px-3 gap-3 d-flex flex-column">
-						<h2 className="display-6 paytone-one">Parents</h2>
+						<h2 className="display-6 paytone-one">Events</h2>
+						<Link className="btn btn-warning fs-5" to={"events/create"}>
+							Create
+						</Link>
 						<Link className="btn btn-warning fs-5" to={"parents"}>
 							View
 						</Link>
 					</div>
-				</Card> */}
+				</Card>
 				<Card className="py-3 px-2 gap-3 shadow-sm bg-light d-flex flex-column flex-md-row justify-content-around align-items-md-center">
 					<div className="px-3 gap-3 d-flex flex-column order-1 order-md-0">
 						<h2 className="display-6 paytone-one">Change Password</h2>
@@ -54,7 +57,7 @@ const Dashboard = () => {
 							Change Password
 						</Link>
 					</div>
-					<div className="order-0 order-md-1">
+					<div className="order-0 order-md-1 text-center">
 						<img
 							style={{ maxWidth: "300px", width: "100%" }}
 							src={IMAGES.authentication}

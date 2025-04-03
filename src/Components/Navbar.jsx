@@ -73,7 +73,7 @@ const NavBar = () => {
                         onClick={() => handleLogout()}
                     >
                         {isLoggingOut && <ThreeDotLoading variant="windmill" color="#f78419" size="small" />}
-                        { !isLoggingOut && `Logout` }
+                        { !isLoggingOut && <span className="text-danger">Logout</span> }
                     </Nav.Link> )}
                 </Navbar.Collapse>
             </Container>

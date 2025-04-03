@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import ErrorMessage from '../Components/ErrorMessage';
-import { schema } from '../yup-schemas/registration-schema';
+import { schema } from '../shemas/yup-schemas/registration-schema';
 import { ThreeDotLoading } from '../Components/Indicators';
 import IMAGES from "../assets/images";
 import ConfirmDialog from '../Components/DialogBoxes/ConfirmDialog';

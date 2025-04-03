@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
+import "./App.css";
+
 import Home from "./Routes/Home";
 import NavBar from "./Components/Navbar.jsx";
 import About from "./Routes/About.jsx";
@@ -12,6 +14,7 @@ import Login from "./Routes/Login.jsx";
 import { ToastContainer } from "react-toastify";
 import RegistrantLists from "./Routes/RegistrantList.jsx";
 import ChangePassword from "./Routes/ChangePassword.jsx";
+import EventCreation from "./Routes/EventCreation.jsx";
 
 function App() {
     return (
@@ -27,14 +30,17 @@ function App() {
 
 				{/* Dashboard */}
 				<Route path="/dashboard" element={<ProtectedRoute />}>
-					<Route path="/dashboard/password" element={<ChangePassword />} />
+					<Route path="password" element={<ChangePassword />} />
 					{/* <Route path="/dashboard/gallery/upload" element={<ImageUpload />} /> */}
 					{/* Applicant */}
 					{/* <Route path="/dashboard/applicants" element={<ApplicantLists />} /> */}
 					{/* <Route path="/dashboard/applicants/details/:id" element={<ViewApplicantDetails />} /> */}
 					{/* Parents */}
-					<Route path="/dashboard/registrants" element={<RegistrantLists />} />
-					{/* <Route path="/dashboard/parents/details/:id" element={<ViewParentDetails />} /> */}
+					<Route path="registrants" element={<RegistrantLists />} />
+					<Route path="events">
+						<Route path="create" element={<EventCreation />} />
+						<Route path=":id/view" element={<EventCreation />} />
+					</Route>
 					<Route index element={<Dashboard />} />
 				</Route>		
             </Routes>
