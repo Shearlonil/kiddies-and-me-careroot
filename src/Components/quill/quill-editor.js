@@ -4,11 +4,11 @@ import Quill from 'quill';
 
 // import { Delta } from 'quill';
 /*
-    DON'T FORGET TO IMPORT THIS THREE CSS MODULES IN app.css or style.css which will imported App.js or App.jsx
+    DON'T FORGET TO IMPORT THIS THREE CSS MODULES IN app.css or style.css which will be imported in App.js or App.jsx
 
-    @import '~quill/dist/quill.core.css';
-    @import '~quill/dist/quill.bubble.css';
-    @import '~quill/dist/quill.snow.css';
+    @import 'quill/dist/quill.core.css';
+    @import 'quill/dist/quill.bubble.css';
+    @import 'quill/dist/quill.snow.css';
 
     .ql-editor {
       font-size: 16px;

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
+import "react-datetime/css/react-datetime.css";
 
 import Home from "./Routes/Home";
 import NavBar from "./Components/Navbar.jsx";

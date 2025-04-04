@@ -1,12 +1,17 @@
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 import { Modal, Carousel, Button } from "react-bootstrap";
 import IMAGES from "../assets/images";
 import { HiLink } from "react-icons/hi";
 import { FcCalendar } from "react-icons/fc";
 import { MdLocationPin } from "react-icons/md";
 import { LiaTimesSolid } from "react-icons/lia";
+import Editor from "../Components/quill/quill-editor";
+import Quill from 'quill';
 
-const EventPopup = ({show, setShow}) => {
+const Delta = Quill.import('delta');
+
+const EventPopup = ({show, setShow, quillValue}) => {
+
     const events = [
         {
             title: "Free Health Check-Up",
@@ -38,12 +43,21 @@ const EventPopup = ({show, setShow}) => {
             </Modal.Header>
             <Modal.Body className="p-0">
                 <Carousel interval={5000} indicators={true}>
-                    {events.map((event, index) => (
-                        <Carousel.Item key={index} style={{ minHeight: "300px" }} className="bg-dark ">
+                    {quillValue?.map((event, index) => {
+                        const quillRef = useRef();
+                        // const quillData = JSON.parse(event.value);
+                        const quillData = event.value;
+                        let content = new Delta();
+                        quillData.forEach(element => {
+                            content.insert(element.insert, element.attributes)
+                        });
+                        quillRef.current?.setContents(content);
+                        return <Carousel.Item key={index} style={{ minHeight: "300px" }} className="bg-dark ">
                             {/* <img src={event.image} className="d-block w-100" alt={event.title} style={{ maxHeight: "300px" }} /> */}
                             <Carousel.Caption className="bg-opacity-75 p-3 rounded">
-                                <h5>{event.title}</h5>
-                                <p>
+                                {/* <h5>{event.title}</h5> */}
+                                <Editor ref={quillRef} withToolBar={false} readOnly={true} />
+                                {/* <p>
                                     <FcCalendar className="me-1" /> {event.date}
                                 </p>
                                 <p>
@@ -54,10 +68,10 @@ const EventPopup = ({show, setShow}) => {
                                     <Button className="btn btn-success" target="_blank" rel="noopener noreferrer" >
                                         <HiLink /> Learn More
                                     </Button>
-                                </p>
+                                </p> */}
                             </Carousel.Caption>
                         </Carousel.Item>
-                    ))}
+                    })}
                 </Carousel>
             </Modal.Body>
             {/* <Modal.Footer>

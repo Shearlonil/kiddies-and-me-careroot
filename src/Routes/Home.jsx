@@ -8,27 +8,38 @@ import AnimatedCard from "../Components/AnimatedCard";
 import { Wrapper } from "../Styles/Home";
 import IMAGES from "../assets/images";
 import EventPopup from "./EventPopupPage";
+import eventController from "../controllers/event-controller";
 
 const Home = () => {
     const navigate = useNavigate();
 
     const [show, setShow] = useState(false);
     const [events, setEvents] = useState([]);
+
+    const handleScroll = () => {
+        if (window.scrollY > 300) {
+            setShow(true);
+            document.removeEventListener("scroll", handleScroll);
+        }
+    };
     
     useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 300 && events.length > 0) {
-                setShow(true);
-                document.removeEventListener("scroll", handleScroll);
-            }
-        };
-
-        document.addEventListener("scroll", handleScroll);
+        initialize();
 
         return () => {
             document.removeEventListener("scroll", handleScroll);
         };
     }, []);
+
+    const initialize = async () => {
+        const response = await eventController.recent();
+
+        if (response && response.data && response.data.length > 0) {
+            setShow(true);
+            setEvents(response.data);
+            // document.addEventListener("scroll", handleScroll);
+        }
+    };
 
     return (
         <Wrapper>
@@ -199,7 +210,7 @@ const Home = () => {
                         </AnimatedCard>
                     </Col>
                 </Row>
-                <EventPopup show={show} setShow={setShow} />
+                <EventPopup show={show} setShow={setShow} quillValue={events} />
             </div>
         </Wrapper>
     );

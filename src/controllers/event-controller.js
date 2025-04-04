@@ -5,11 +5,16 @@ const create = async (data) => {
     return await httpService.post(`/event/create`, data);
 }
 
+const recent = async () => {
+    return await httpService.get(`/event/recent`);
+}
+
 const fetchAll = async (reqBody, pageSpan) => {
     return await httpService.post(`/event/all/${pageSpan}`, reqBody);
 }
 
 export default {
     create,
+    recent,
     fetchAll,
 }
