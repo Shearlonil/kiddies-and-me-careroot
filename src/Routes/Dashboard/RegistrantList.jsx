@@ -3,12 +3,12 @@ import { Table } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
 
-import handleErrMsg from "../Utils/error-handler";
-import { useAuth } from "../app-context/auth-user-context";
-import registrantController from "../controllers/registrant-controller";
-import PaginationLite from '../Components/PaginationLite';
-import { OrbitalLoading } from "../Components/Indicators";
-import EllipsisText from "../Components/EllipsisText";
+import handleErrMsg from "../../Utils/error-handler";
+import { useAuth } from "../../app-context/auth-user-context";
+import registrantController from "../../controllers/registrant-controller";
+import PaginationLite from '../../Components/PaginationLite';
+import { OrbitalLoading } from "../../Components/Indicators";
+import EllipsisText from "../../Components/EllipsisText";
 
 const RegistrantLists = () => {
 

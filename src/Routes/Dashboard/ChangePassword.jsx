@@ -6,13 +6,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-import ErrorMessage from "../Components/ErrorMessage";
-import { useAuth } from '../app-context/auth-user-context';
-import staffController from "../controllers/staff-controller";
-import handleErrMsg from "../Utils/error-handler";
-import IMAGES from "../assets/images";
-import { ThreeDotLoading } from "../Components/Indicators";
-import ConfirmDialog from "../Components/DialogBoxes/ConfirmDialog";
+import ErrorMessage from "../../Components/ErrorMessage";
+import { useAuth } from '../../app-context/auth-user-context';
+import staffController from "../../controllers/staff-controller";
+import handleErrMsg from "../../Utils/error-handler";
+import IMAGES from "../../assets/images";
+import { ThreeDotLoading } from "../../Components/Indicators";
+import ConfirmDialog from "../../Components/DialogBoxes/ConfirmDialog";
 
 const ChangePassword = () => {
 	const navigate = useNavigate();

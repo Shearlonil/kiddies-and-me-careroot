@@ -2,9 +2,9 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FiUpload } from "react-icons/fi";
-import { useAuth } from "../app-context/auth-user-context";
+import { useAuth } from "../../app-context/auth-user-context";
 
-import IMAGES from "../assets/images";
+import IMAGES from "../../assets/images";
 
 const Dashboard = () => {
 	const navigate = useNavigate();

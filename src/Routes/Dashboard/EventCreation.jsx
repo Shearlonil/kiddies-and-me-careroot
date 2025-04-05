@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Button, CloseButton, Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -6,22 +6,16 @@ import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import Datetime from "react-datetime";
 import { format } from "date-fns";
-
-import editorSchema from "../shemas/quill-schema";
-import Editor from '../Components/quill/quill-editor';
-import Quill from 'quill';
-import Ajv from "ajv";
 import { Controller, useForm } from 'react-hook-form';
 
-const Delta = Quill.import('delta');
-import { useAuth } from '../app-context/auth-user-context';
-import { schema } from '../shemas/yup-schemas/event-schema';
-import eventController from '../controllers/event-controller';
-import handleErrMsg from '../Utils/error-handler';
-import ErrorMessage from '../Components/ErrorMessage';
-import IMAGES from '../assets/images';
-import ConfirmDialog from '../Components/DialogBoxes/ConfirmDialog';
-import { ThreeDotLoading } from '../Components/Indicators';
+import { useAuth } from '../../app-context/auth-user-context';
+import { schema } from '../../shemas/yup-schemas/event-schema';
+import eventController from '../../controllers/event-controller';
+import handleErrMsg from '../../Utils/error-handler';
+import ErrorMessage from '../../Components/ErrorMessage';
+import IMAGES from '../../assets/images';
+import ConfirmDialog from '../../Components/DialogBoxes/ConfirmDialog';
+import { ThreeDotLoading } from '../../Components/Indicators';
 
 const EventCreation = () => {
 
@@ -30,15 +24,15 @@ const EventCreation = () => {
     
     const { handleRefresh, logout } = useAuth();
     
-	// Use a ref to access the quill instance directly
-	const quillRef = useRef();
     const [networkRequest, setNetworkRequest] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
     const [displayMsg, setDisplayMsg] = useState("");
     const [confirmDialogEvtName, setConfirmDialogEvtName] = useState(null);
+    const [selectedDateIndex, setSelectedDateIndex] = useState(-1);
 
     const [dates, setDates] = useState([]);
+    const [eventForm, setEventForm] = useState(null);
     
     const dateSchema = yup.object().shape({
         date: yup
@@ -52,7 +46,6 @@ const EventCreation = () => {
     });
 
 	const {
-		register: dateRegister,
 		handleSubmit: handleDateSubmit,
 		control,
 		setValue: setDateValue,
@@ -63,7 +56,7 @@ const EventCreation = () => {
 	});
 
 	const {
-		register: eventRegister,
+		register,
 		handleSubmit: handleEventSubmit,
 		setValue: setEventValue,
 		resetField: resetEventField,
@@ -78,56 +71,76 @@ const EventCreation = () => {
 	});
 
     const handleOpenModal = () => {
-        setDisplayMsg("Create new event?");
         setShowModal(true);
     };
 
     const handleCloseModal = () => setShowModal(false);
 
 	const onSubmit = async (formData) => {
-		console.log(formData);
+        if(dates.length <= 0){
+            toast.error('Please add dates');
+            return;
+        }
+        const arr = [];
+        dates.forEach(date => arr.push(date.toISOString()));
+        formData.dates = arr;
+        setEventForm(formData);
+        setConfirmDialogEvtName('create');
+        setDisplayMsg("Create new event?");
+        setShowModal(true);
 	};
 
-	const onDateSubmit = async (formData) => {
-        dates.push(formData);
-		console.log(formData);
+	const onDateSubmit = (formData) => {
+        const arr = [...dates];
+        arr.push(formData.date);
+        setDates(arr);
 	};
 
 	const handleConfirmAction = async () => {
         setShowModal(false);
-		try {
-            setNetworkRequest(true);
-            const { ops } = quillRef.current.getContents();
-            const isValid = ajv.validate(editorSchema, ops);
-            if (!isValid) {
-                toast.error("Please input valid event");
-            }else {
-			    await eventController.create(ops);
-            }
-            setNetworkRequest(false);
-		} catch (error) {
-			// Incase of 408 Timeout error (Token Expiration), perform refresh
-			try {
-				if(error.response?.status === 408){
-					await handleRefresh();
-					return handleConfirmAction();
-				}
-				// display error message
-				toast.error(handleErrMsg(error).msg);
-			} catch (error) {
-				// if error while refreshing, logout and delete all cookies
-				logout();
-			}
-            setNetworkRequest(false);
-		}
+        switch (confirmDialogEvtName) {
+            case 'create':
+                try {
+                    setNetworkRequest(true);
+                    await eventController.create(eventForm);
+                    setNetworkRequest(false);
+                } catch (error) {
+                    // Incase of 408 Timeout error (Token Expiration), perform refresh
+                    try {
+                        if(error.response?.status === 408){
+                            await handleRefresh();
+                            return handleConfirmAction();
+                        }
+                        // display error message
+                        toast.error(handleErrMsg(error).msg);
+                    } catch (error) {
+                        // if error while refreshing, logout and delete all cookies
+                        logout();
+                    }
+                    setNetworkRequest(false);
+                }
+                break;
+            case 'date':
+                //  date removal from list
+                dates.splice(selectedDateIndex, 1);
+                setDates(dates);
+                break;
+        }
 	}
 
     const buildAddedDates = () => {
-        return dates.map(({ date }, index) => (
+        return dates.map((date, index) => (
             <div key={index}  className={`m-3 bg-primary-subtle text-dark rounded-3 fw-bold p-2 fs-6 d-flex align-items-center justify-content-between`} >
                 <small className="pe-2 me-2 m-0">{format(date, "dd-MM-yyyy")}</small>
                 <div className="d-flex gap-2">
-                    <CloseButton className="p-0" onClick={() => handleOpenModal(date, false, 'industry', `Remove ${date} from list of industries?` )} aria-label="Hide" />
+                    <CloseButton 
+                        className="p-0" aria-label="Hide"
+                        onClick={() => {
+                            setDisplayMsg(`Remove ${format(date, "dd-MM-yyyy")} from the list?`);
+                            setSelectedDateIndex(index);
+                            setConfirmDialogEvtName('date');
+                            handleOpenModal();
+                        }} />
                 </div>
             </div>
         ));
@@ -151,7 +164,7 @@ const EventCreation = () => {
                                 <Form.Control
                                     type="text"
                                     placeholder="Title"
-                                    {...eventRegister("title")}
+                                    {...register("title")}
                                 />
                                 <ErrorMessage source={eventErrors.title} />
                             </Col>
@@ -167,7 +180,7 @@ const EventCreation = () => {
                                 <Form.Control
                                     type="text"
                                     placeholder="Venue"
-                                    {...eventRegister("venue")}
+                                    {...register("venue")}
                                 />
                                 <ErrorMessage source={eventErrors.venue} />
                             </Col>
@@ -183,7 +196,7 @@ const EventCreation = () => {
                                 <Form.Control
                                     type="text"
                                     placeholder="Time"
-                                    {...eventRegister("time")}
+                                    {...register("time")}
                                 />
                                 <ErrorMessage source={eventErrors.time} />
                             </Col>
@@ -254,14 +267,6 @@ const EventCreation = () => {
                     </div>
                 </div>
             </div>
-
-            {/* <div id="body" className="mb-3">
-                <Editor ref={quillRef} />
-            </div>
-            <Button variant="" className="btn-outline-primary" style={{minWidth: '150px'}} onClick={() => handleOpenModal()} disabled={networkRequest}>
-                {!networkRequest && 'Save'}
-                { networkRequest && <ThreeDotLoading color="#ffffff" size="small" variant = "pulsate" />}
-            </Button> */}
             <ConfirmDialog show={showModal} handleClose={handleCloseModal} handleConfirm={handleConfirmAction} message={displayMsg} />
         </div>
     )

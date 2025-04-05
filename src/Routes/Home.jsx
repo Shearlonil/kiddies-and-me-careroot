@@ -35,9 +35,9 @@ const Home = () => {
         const response = await eventController.recent();
 
         if (response && response.data && response.data.length > 0) {
-            setShow(true);
+            // setShow(true);
             setEvents(response.data);
-            // document.addEventListener("scroll", handleScroll);
+            document.addEventListener("scroll", handleScroll);
         }
     };
 
@@ -210,7 +210,7 @@ const Home = () => {
                         </AnimatedCard>
                     </Col>
                 </Row>
-                <EventPopup show={show} setShow={setShow} quillValue={events} />
+                <EventPopup show={show} setShow={setShow} events={events} />
             </div>
         </Wrapper>
     );
