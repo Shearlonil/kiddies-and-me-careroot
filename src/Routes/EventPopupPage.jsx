@@ -41,7 +41,7 @@ const EventPopup = ({show, setShow, events}) => {
             <Modal.Body className="p-0">
                 <Carousel interval={5000} indicators={true}>
                     {events?.map((event, index) => {
-                        const eventDates = event.EventDates.map(eventDate => eventDate.date + ", ");
+                        const eventDates = event.EventDates.map(eventDate => eventDate.date + " | ");
                         return <Carousel.Item key={index} style={{ minHeight: "300px" }} className="bg-dark ">
                             {/* <img src={event.image} className="d-block w-100" alt={event.title} style={{ maxHeight: "300px" }} /> */}
                             <Carousel.Caption className="bg-opacity-75 p-3 rounded">

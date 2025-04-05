@@ -1,55 +1,87 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import IMAGES from "../assets/images";
+import { Link } from "react-router-dom";
 import AnimatedCard from "../Components/AnimatedCard";
 import { FaClock } from "react-icons/fa6";
 import { FcCalendar } from "react-icons/fc";
 import { MdLocationPin } from "react-icons/md";
 
-const events = [
-    {
-        title: "Support for Parents in Need",
-        date: "June - 7th, 14th, 21st,28th",
-        location: " Davis Estate Community Centre (DERAC) Barberry Ave, Chatham. Me5 9te.",
-        time: "1.30 pm - 5.30pm",
-        image: IMAGES.image_1,
-    },
-    {
-        title: "Community Mental Health Workshop",
-        date: "March 20, 2025",
-        location: " Local Community Center",
-        time: "1.30 pm - 5.30pm",
-        image: IMAGES.image_2,
-    },
-    {
-        title: "Nutrition & Wellness Seminar",
-        date: "May- 3rd, 10th, 17th, 24th and 31st",
-        location: " Maidstone",
-        time: "1.30 pm - 5.30pm",
-        image: IMAGES.image_3,
-    },
-];
+import eventController from "../controllers/event-controller";
+import IMAGES from "../assets/images";
+import Skeleton from "react-loading-skeleton";
 
 const Events = () => {
+    const imgs = [IMAGES.ai_children, IMAGES.preg_4, IMAGES.black_mother_and_child, IMAGES.coounseling, IMAGES.group_support, IMAGES.talking_counselor, IMAGES.logo]
+    const [networkRequest, setNetworkRequest] = useState(false);
+    const [events, setEvents] = useState([]);
+    const [arr, setArr] = useState([]);
+
+    useEffect(() => {
+        initialize();
+    }, []);
+
+    const initialize = async () => {
+        setNetworkRequest(true);
+        const response = await eventController.fetchUpComing();
+
+        if (response && response.data && response.data.length > 0) {
+            setEvents(response.data);
+            const set = new Set();
+            while(set.size < response.data.length) {
+                set.add(Math.floor(Math.random() * imgs.length))
+            }
+            setArr(Array.from(set));
+            console.log(arr);
+        }
+        setNetworkRequest(false);
+    };
+
+    const buildSkeleton = () => {
+        return new Array(1).fill(1).map((index) => (
+            <Row className="g-4" key={Math.random()}>
+                <Col key={index} md={6} lg={4}>
+                    <AnimatedCard>
+                        <Card className="shadow-sm border-0"  style={{ height: "550px", maxHeight: "600px" }} >
+                            <Skeleton count={1} width={"100%"} height={"250px"} />
+                            <Card.Body className="d-flex flex-column justify-content-around">
+                                <Card.Title>
+                                    <Skeleton count={1} width={"100%"} />
+                                </Card.Title>
+                                <Card.Text>
+                                    <Skeleton count={3} width={"100%"} />
+                                </Card.Text>
+                            </Card.Body>
+                            <Card.Footer>
+                                <Skeleton count={1} width={"100%"} />
+                            </Card.Footer>
+                        </Card>
+                    </AnimatedCard>
+                </Col>
+            </Row>
+        ));
+    };
+
     return (
         <Container className="py-5">
             <h2 className="text-center mb-4">Upcoming Events</h2>
             <Row className="g-4">
-                {events.map((event, index) => (
-                    <Col key={index} md={6} lg={4}>
+                {!networkRequest && events.map((event, index) => {
+                    const eventDates = event.EventDates.map(eventDate => eventDate.date + " | ");
+                    return <Col key={index} md={6} lg={4}>
                         <AnimatedCard>
                             <Card className="shadow-sm border-0"  style={{ height: "550px", maxHeight: "600px" }} >
-                                <Card.Img height={"270px"} variant="top" src={event.image} alt={event.title} />
+                                <Card.Img height={"250px"} variant="top" src={imgs[arr[index]]} alt={event.title} />
                                 <Card.Body className="d-flex flex-column justify-content-around">
                                     <Card.Title>{event.title}</Card.Title>
                                     <Card.Text>
-                                        <strong>
-                                            <FcCalendar className="me-1" /> {event.date}
+                                        <strong className="mb-3">
+                                            <FcCalendar className="me-1" /> {eventDates}
                                         </strong>
+                                        <br />
                                         <br />
                                         <span>
                                             <MdLocationPin className="me-1" />
-                                            {event.location}
+                                            {event.venue}
                                         </span>{" "}
                                         <br />
                                         <span>
@@ -59,12 +91,13 @@ const Events = () => {
                                     </Card.Text>
                                 </Card.Body>
                                 <Card.Footer>
-                                    <small clas>Parking ais available on the street.</small>
+                                    <Link to={'/on-boarding'}>Join Us</Link>
                                 </Card.Footer>
                             </Card>
                         </AnimatedCard>
                     </Col>
-                ))}
+                })}
+                {networkRequest && buildSkeleton()}
             </Row>
         </Container>
     );

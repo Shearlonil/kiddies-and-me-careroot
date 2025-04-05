@@ -18,8 +18,6 @@ import ConfirmDialog from '../../Components/DialogBoxes/ConfirmDialog';
 import { ThreeDotLoading } from '../../Components/Indicators';
 
 const EventCreation = () => {
-
-    const ajv = new Ajv({allErrors: true}); // options can be passed, e.g. {allErrors: true}
 	const navigate = useNavigate();
     
     const { handleRefresh, logout } = useAuth();
@@ -48,9 +46,6 @@ const EventCreation = () => {
 	const {
 		handleSubmit: handleDateSubmit,
 		control,
-		setValue: setDateValue,
-		resetField: resetDateField,
-		formState: { errors: dateErrors },
 	} = useForm({
 		resolver: yupResolver(dateSchema),
 	});
@@ -58,9 +53,8 @@ const EventCreation = () => {
 	const {
 		register,
 		handleSubmit: handleEventSubmit,
-		setValue: setEventValue,
-		resetField: resetEventField,
-		formState: { errors: eventErrors },
+        reset,
+		formState: { errors },
 	} = useForm({
 		resolver: yupResolver(schema),
 		defaultValues: {
@@ -103,6 +97,8 @@ const EventCreation = () => {
                 try {
                     setNetworkRequest(true);
                     await eventController.create(eventForm);
+                    reset();
+                    setDates(null);
                     setNetworkRequest(false);
                 } catch (error) {
                     // Incase of 408 Timeout error (Token Expiration), perform refresh
@@ -166,7 +162,7 @@ const EventCreation = () => {
                                     placeholder="Title"
                                     {...register("title")}
                                 />
-                                <ErrorMessage source={eventErrors.title} />
+                                <ErrorMessage source={errors.title} />
                             </Col>
                         </Row>
                     </Form.Group>
@@ -182,7 +178,7 @@ const EventCreation = () => {
                                     placeholder="Venue"
                                     {...register("venue")}
                                 />
-                                <ErrorMessage source={eventErrors.venue} />
+                                <ErrorMessage source={errors.venue} />
                             </Col>
                         </Row>
                     </Form.Group>
@@ -198,7 +194,7 @@ const EventCreation = () => {
                                     placeholder="Time"
                                     {...register("time")}
                                 />
-                                <ErrorMessage source={eventErrors.time} />
+                                <ErrorMessage source={errors.time} />
                             </Col>
                         </Row>
                     </Form.Group>
@@ -249,7 +245,7 @@ const EventCreation = () => {
                                         {!networkRequest && "Add"}
                                     </Button>
                                 </div>
-                                {dates.length > 0 && buildAddedDates()}
+                                {dates && buildAddedDates()}
                             </Col>
                         </Row>
                     </Form.Group>

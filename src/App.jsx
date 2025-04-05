@@ -3,19 +3,21 @@ import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import "react-datetime/css/react-datetime.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import Home from "./Routes/Home";
 import NavBar from "./Components/Navbar.jsx";
 import About from "./Routes/About.jsx";
 import Footer from "./Components/Footer.jsx";
 import Registration from "./Routes/Registration.jsx";
-import Dashboard from "./Routes/Dashboard.jsx";
 import { ProtectedRoute } from './Routes/ProtectedRoute';
 import Login from "./Routes/Login.jsx";
 import { ToastContainer } from "react-toastify";
-import RegistrantLists from "./Routes/RegistrantList.jsx";
-import ChangePassword from "./Routes/ChangePassword.jsx";
-import EventCreation from "./Routes/EventCreation.jsx";
+import RegistrantLists from "./Routes/Dashboard/RegistrantList.jsx";
+import ChangePassword from "./Routes/Dashboard/ChangePassword.jsx";
+import EventCreation from "./Routes/Dashboard/EventCreation.jsx";
+import Dashboard from "./Routes/Dashboard/Dashboard.jsx";
+import Events from "./Routes/Events.jsx";
 
 function App() {
     return (
@@ -25,6 +27,7 @@ function App() {
                 <Route index path="/" element={<Home />} />
                 <Route index path="about" element={<About />} />
                 <Route index path="on-boarding" element={<Registration />} />
+                <Route index path="events" element={<Events />} />
 
 				{/* Login */}
 				<Route path="/login" element={<Login />} />
