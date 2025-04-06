@@ -98,7 +98,7 @@ const EventCreation = () => {
                     setNetworkRequest(true);
                     await eventController.create(eventForm);
                     reset();
-                    setDates(null);
+                    setDates([]);
                     setNetworkRequest(false);
                 } catch (error) {
                     // Incase of 408 Timeout error (Token Expiration), perform refresh

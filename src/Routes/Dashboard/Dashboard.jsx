@@ -45,7 +45,7 @@ const Dashboard = () => {
 						<Link className="btn btn-warning fs-5" to={"events/create"}>
 							Create
 						</Link>
-						<Link className="btn btn-warning fs-5" to={"parents"}>
+						<Link className="btn btn-warning fs-5" to={"events/all"}>
 							View
 						</Link>
 					</div>

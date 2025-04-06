@@ -1,8 +1,15 @@
 import httpService from "../axios/http-service";
 
-//  fetch in stock items for sales/shelf view
 const create = async (data) => {
     return await httpService.post(`/events/create`, data);
+}
+
+const update = async (data) => {
+    return await httpService.post(`/events/update`, data);
+}
+
+const markdone = async (id) => {
+    return await httpService.post(`/events/update/${id}`);
 }
 
 const recent = async () => {
@@ -17,9 +24,16 @@ const fetchAll = async (reqBody, pageSpan) => {
     return await httpService.post(`/events/all/${pageSpan}`, reqBody);
 }
 
+const findById = async (id) => {
+    return await httpService.get(`/events/find/${id}`);
+}
+
 export default {
     create,
+    update,
+    markdone,
     recent,
     fetchUpComing,
     fetchAll,
+    findById,
 }

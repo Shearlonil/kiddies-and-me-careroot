@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, CloseButton, Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import Datetime from "react-datetime";
@@ -16,8 +16,12 @@ import ErrorMessage from '../../Components/ErrorMessage';
 import IMAGES from '../../assets/images';
 import ConfirmDialog from '../../Components/DialogBoxes/ConfirmDialog';
 import { ThreeDotLoading } from '../../Components/Indicators';
+import Skeleton from 'react-loading-skeleton';
 
 const EventUpdate = () => {
+    const navigate = useNavigate();
+    const { id } = useParams();
+
     const { handleRefresh, logout } = useAuth();
     
     const [networkRequest, setNetworkRequest] = useState(false);
@@ -51,7 +55,6 @@ const EventUpdate = () => {
 	const {
 		register,
 		handleSubmit: handleEventSubmit,
-        reset,
         setValue,
 		formState: { errors },
 	} = useForm({
@@ -68,11 +71,35 @@ const EventUpdate = () => {
     }, []);
 
     const initialize = async () => {
-        const response = await eventController.recent();
+        try {
+			setNetworkRequest(true);
+            const response = await eventController.findById(id);
 
-        if (response && response.data && response.data.length > 0) {
-            setEvents(response.data);
-            document.addEventListener("scroll", handleScroll);
+            if (response && response.data) {
+                setValue('title', response.data.title);
+                setValue('venue', response.data.venue);
+                setValue('time', response.data.time);
+                const arr = [];
+                response.data.EventDates.forEach(eventDate => {
+                    arr.push(new Date(eventDate.date))
+                });
+                setDates(arr);
+            }
+			setNetworkRequest(false);
+        } catch (error) {
+            // Incase of 408 Timeout error (Token Expiration), perform refresh
+			try {
+				if(error.response?.status === 408){
+					await handleRefresh();
+					return initialize();
+				}
+				// display error message
+				toast.error(handleErrMsg(error).msg);
+			} catch (error) {
+				// if error while refreshing, logout and delete all cookies
+				logout();
+			}
+			setNetworkRequest(false);
         }
     };
 
@@ -89,10 +116,17 @@ const EventUpdate = () => {
         }
         const arr = [];
         dates.forEach(date => arr.push(date.toISOString()));
+        formData.id = id;
         formData.dates = arr;
         setEventForm(formData);
-        setConfirmDialogEvtName('create');
-        setDisplayMsg("Create new event?");
+        setConfirmDialogEvtName('update');
+        setDisplayMsg("Update event?");
+        setShowModal(true);
+	};
+
+	const markdone = async (formData) => {
+        setConfirmDialogEvtName('markdone');
+        setDisplayMsg("Mark event as done?");
         setShowModal(true);
 	};
 
@@ -105,12 +139,12 @@ const EventUpdate = () => {
 	const handleConfirmAction = async () => {
         setShowModal(false);
         switch (confirmDialogEvtName) {
-            case 'create':
+            case 'update':
                 try {
                     setNetworkRequest(true);
-                    await eventController.create(eventForm);
-                    reset();
-                    setDates(null);
+                    await eventController.update(eventForm);
+                    toast.info('Update successful');
+                    navigate('/dashboard/events/all');
                     setNetworkRequest(false);
                 } catch (error) {
                     // Incase of 408 Timeout error (Token Expiration), perform refresh
@@ -133,6 +167,29 @@ const EventUpdate = () => {
                 dates.splice(selectedDateIndex, 1);
                 setDates(dates);
                 break;
+            case 'markdone':
+                try {
+                    setNetworkRequest(true);
+                    await eventController.markdone(id);
+                    toast.info('Update successful');
+                    navigate('/dashboard/events/all');
+                    setNetworkRequest(false);
+                } catch (error) {
+                    // Incase of 408 Timeout error (Token Expiration), perform refresh
+                    try {
+                        if(error.response?.status === 408){
+                            await handleRefresh();
+                            return handleConfirmAction();
+                        }
+                        // display error message
+                        toast.error(handleErrMsg(error).msg);
+                    } catch (error) {
+                        // if error while refreshing, logout and delete all cookies
+                        logout();
+                    }
+                    setNetworkRequest(false);
+                }
+                break;
         }
 	}
 
@@ -154,6 +211,57 @@ const EventUpdate = () => {
         ));
     };
 
+    const buildSkeleton = () => {
+        return <div className="bg-light p-4 rounded-4 border border-2 container">
+            <Form.Group className="mb-3" controlId="title">
+                <Row>
+                    <Col sm={"12"} md="3">
+                        <Skeleton />
+                    </Col>
+                    <Col sm={"12"} md="9">
+                        <Skeleton />
+                    </Col>
+                </Row>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="venue">
+                <Row>
+                    <Col sm={"12"} md="3">
+                        <Skeleton />
+                    </Col>
+                    <Col sm={"12"} md="9">
+                        <Skeleton />
+                    </Col>
+                </Row>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="time">
+                <Row>
+                    <Col sm={"12"} md="3">
+                        <Skeleton />
+                    </Col>
+                    <Col sm={"12"} md="9">
+                        <Skeleton />
+                    </Col>
+                </Row>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="dates">
+                <Row>
+                    <Col sm={"12"} md="3">
+                        <Skeleton />
+                    </Col>
+                    <Col sm={"12"} md="9">
+                        <Skeleton />
+                    </Col>
+                </Row>
+            </Form.Group>
+            <div className="text-center">
+                <Skeleton />
+            </div>
+        </div>
+    };
+
     return (
         <div className="container my-5" style={{minHeight: '65vh'}}>
 			<h2 className="paytone-one text-white fw-bold p-2 orange-btn">Update Event</h2>
@@ -161,8 +269,8 @@ const EventUpdate = () => {
                 <div className="text-center">
                     <img className="mb-2" src={IMAGES.logo} alt="" height="200" width={'100%'} />
                 </div>
-                <div className="bg-light p-4 rounded-4 border border-2">
-
+                {networkRequest && buildSkeleton()}
+                {!networkRequest && <div className="bg-light p-4 rounded-4 border border-2">
                     <Form.Group className="mb-3" controlId="title">
                         <Row>
                             <Col sm={"12"} md="3">
@@ -261,7 +369,7 @@ const EventUpdate = () => {
                             </Col>
                         </Row>
                     </Form.Group>
-                    <div className="text-center">
+                    <div className="text-center d-flex flex-column gap-3 align-items-center">
                         <Button
                             variant="success"
                             type="submit"
@@ -270,10 +378,20 @@ const EventUpdate = () => {
                             disabled={networkRequest}
                         >
                             {networkRequest && <ThreeDotLoading color={"#ffffff"} />}
-                            {!networkRequest && "Create"}
+                            {!networkRequest && "Update"}
+                        </Button>
+
+                        <Button
+                            type="submit"
+                            className='w-75 orange-btn'
+                            onClick={handleEventSubmit(markdone)}
+                            disabled={networkRequest}
+                        >
+                            {networkRequest && <ThreeDotLoading color={"#ffffff"} />}
+                            {!networkRequest && "Mark Done"}
                         </Button>
                     </div>
-                </div>
+                </div>}
             </div>
             <ConfirmDialog show={showModal} handleClose={handleCloseModal} handleConfirm={handleConfirmAction} message={displayMsg} />
         </div>

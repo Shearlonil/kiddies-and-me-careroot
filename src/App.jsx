@@ -18,6 +18,8 @@ import ChangePassword from "./Routes/Dashboard/ChangePassword.jsx";
 import EventCreation from "./Routes/Dashboard/EventCreation.jsx";
 import Dashboard from "./Routes/Dashboard/Dashboard.jsx";
 import Events from "./Routes/Events.jsx";
+import AdminEventsView from "./Routes/Dashboard/AdminEventsView.jsx";
+import EventUpdate from "./Routes/Dashboard/EventUpdate.jsx";
 
 function App() {
     return (
@@ -43,7 +45,8 @@ function App() {
 					<Route path="registrants" element={<RegistrantLists />} />
 					<Route path="events">
 						<Route path="create" element={<EventCreation />} />
-						<Route path=":id/view" element={<EventCreation />} />
+						<Route path="all" element={<AdminEventsView />} />
+						<Route path=":id/view" element={<EventUpdate />} />
 					</Route>
 					<Route index element={<Dashboard />} />
 				</Route>		

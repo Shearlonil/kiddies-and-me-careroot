@@ -91,7 +91,7 @@ const Events = () => {
                                     </Card.Text>
                                 </Card.Body>
                                 <Card.Footer>
-                                    <Link to={'/on-boarding'}>Join Us</Link>
+                                    <Link to={'/on-boarding'} className="fw-bold text-danger">Join Us</Link>
                                 </Card.Footer>
                             </Card>
                         </AnimatedCard>
