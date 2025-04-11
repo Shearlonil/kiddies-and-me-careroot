@@ -161,11 +161,11 @@ const Registration = () => {
             
                         {/* Zip*/}
                         <div>
-                            <label className="fw-bold">Postal / Zip Code:</label>
+                            <label className="fw-bold">Postcode:</label>
                             <input
-                                type="number"
+                                type="text"
                                 className="form-control shadow-sm"
-                                placeholder="Postal / Zip Code"
+                                placeholder="Postcode"
                                 {...register("zip")}
                             />
                             <ErrorMessage source={errors.zip} />
